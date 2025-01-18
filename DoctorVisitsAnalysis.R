@@ -1,0 +1,42 @@
+DoctorVisits <- read.csv("C:/Users/Downloads/DoctorVisits.csv")
+View(DoctorVisits)
+library(FactoMineR)
+library(factoextra)
+head(DoctorVisits)
+str(DoctorVisits)
+summary(DoctorVisits)
+apply(DoctorVisits, 2, var)
+DoctorVisits <- DoctorVisits[, !(names(DoctorVisits) %in% c("rownames"))]
+sapply(DoctorVisits, function(x) sum(is.na(x)))
+sapply(DoctorVisits, function(x) sum(is.infinite(x)))
+sapply(DoctorVisits, is.numeric)
+sapply(DoctorVisits, is.character)
+DoctorVisits$gender <- ifelse(DoctorVisits$gender == "female", 1, 0)
+DoctorVisits$private <- ifelse(DoctorVisits$private == "yes", 1, 0)
+DoctorVisits$freepoor <- ifelse(DoctorVisits$freepoor == "yes", 1, 0)
+DoctorVisits$freerepat <- ifelse(DoctorVisits$freerepat == "yes", 1, 0)
+DoctorVisits$nchronic <- ifelse(DoctorVisits$nchronic == "yes", 1, 0)
+DoctorVisits$lchronic <- ifelse(DoctorVisits$lchronic == "yes", 1, 0)
+DoctorVisits_scaled <- scale(DoctorVisits[, sapply(DoctorVisits, is.numeric)])
+apply(DoctorVisits_scaled, 2, mean)
+apply(DoctorVisits_scaled, 2, sd)
+res.pca <- PCA(DoctorVisits_scaled, graph = TRUE)
+ind.coord <- res.pca$ind$coord
+head(ind.coord)
+ind.contrib <- res.pca$ind$contrib
+head(ind.contrib)
+var.coord <- res.pca$var$coord
+head(var.coord)
+var.contrib <- res.pca$var$contrib
+head(var.contrib)
+ind.cos2 <- res.pca$ind$cos2
+head(ind.cos2)
+var.cos2 <- res.pca$var$cos2
+head(var.cos2)
+fviz_eig(res.pca, addlabels = TRUE, ylim = c(0, 50))
+fviz_pca_ind(res.pca, col.ind = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
+fviz_contrib(res.pca, choice = "ind", axes = 1)
+fviz_pca_var(res.pca, col.var = "contrib", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
+fviz_cos2(res.pca, choice = "var", axes = 1:2)
+fviz_pca_biplot(res.pca, repel = TRUE, col.var = "blue", col.ind = "red")
+fviz_pca_biplot(res.pca, repel = TRUE, col.var = "blue", col.ind = "red")
